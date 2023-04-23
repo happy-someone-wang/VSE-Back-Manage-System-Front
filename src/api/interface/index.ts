@@ -96,12 +96,3 @@ export namespace Review {
 	}
 }
 
-//课程管理模块
-export namespace CourseManagement{
-	export interface CourseInfo {
-		courseId: number,
-		courseName: string,
-		semester: string,
-		year: number
-	}
-}
