@@ -9,8 +9,8 @@
     <el-button type="primary" @click="clickAddNotice">新增公告</el-button>
     <el-table :data="showList" stripe style="width: 100%; min-height: 350px">
       <el-table-column prop="noticeId" label="公告序号" width="220" />
-      <el-table-column prop="noticeTitle" label="公告标题" width="220" />
-      <el-table-column prop="publishTime" label="发布时间" width="220" />
+      <el-table-column prop="title" label="公告标题" width="220" />
+      <el-table-column prop="time" label="发布时间" width="220" />
       <el-table-column label="操作" width="220">
         <template #default="scope">
           <el-button type="primary" size="small" @click="clickeditNotice(scope.row)">修改</el-button>
@@ -42,8 +42,11 @@
         <el-input v-model="addNoticeForm.courseId" disabled />
       </el-form-item>
       <el-form-item label="公告内容" prop="content">
-        <!--富文本输入公告内容-->
-        <el-editor v-model="addNoticeForm.content" :height="500" :initial-value="addNoticeForm.content" />
+        <!-- 富文本输入公告内容
+        <div id="editor-container">
+          <Editor v-model="addNoticeForm.content" />
+        </div> -->
+        <el-input v-model="addNoticeForm.content" />
       </el-form-item>
     </el-form>
     <el-button type="primary" @click="onSubmit">确认</el-button>
@@ -67,10 +70,11 @@
         <el-input v-model="addNoticeForm.noticeId" disabled />
       </el-form-item>
       <el-form-item label="公告内容" prop="content">
-        <!--富文本输入公告内容-->
+        <!-- 富文本输入公告内容
         <div id="editor-container">
           <Editor v-model="addNoticeForm.content" />
-        </div>
+        </div> -->
+        <el-input v-model="addNoticeForm.content" />
       </el-form-item>
     </el-form>
     <el-button type="primary" @click="onSubmit">确认</el-button>
@@ -88,13 +92,13 @@ import { getAnnouncementsByCourseId, addAnnouncement, deleteAnnouncementsById } 
 import { ElMessage } from 'element-plus'
 import Editor from '@wangeditor/editor'
 
-const courseId = 1
+const courseId = 42041301
 const deleteNoticeId = ref(0)
 const dialogTableVisible = ref(false)
 const dialogDeleteVisible = ref(false)
 const dialogModifyVisible = ref(false)
 const showList = ref<Announcement.SingleAnnouncement[]>()
-const addNoticeForm = ref({ noticeId: 0, courseId: 1, noticeTitle: '', publishTime: new Date(), content: '' })
+const addNoticeForm = ref({ noticeId: 0, courseId: courseId, noticeTitle: '', publishTime: new Date(), content: '' })
 
 const upload = ref<UploadInstance>()
 
@@ -118,7 +122,9 @@ onMounted(() => {
   getAnnouncementsByCourseId({ 'courseId': courseId })
     .then(res => {
       noticeList = res.data
+      console.log(res.data)
       showList.value = noticeList
+      console.log(showList.value)
     })
     .catch(err => {
       console.log(err)
@@ -183,20 +189,21 @@ const deleteNotice = () => {
 //确认提交新增
 const onSubmit = () => {
 
-  let params: Announcement.SingleAnnouncement = {
+  let params= ref<Announcement.SingleAnnouncement>({
     // courseId: 0,
-    courseId: addNoticeForm.value.courseId,
-    noticeId: 0,
+    courseId: (addNoticeForm.value.courseId).toString(),
+    noticeId: (0).toString(),
     noticeTitle: addNoticeForm.value.noticeTitle,
     publishTime: new Date(addNoticeForm.value.publishTime).toLocaleDateString(),
     content: addNoticeForm.value.content
-  }
+  })
 
   /**先确认信息是否填写完整！ */
-  if (params['noticeTitle'] == '' ||
-    params['publishTime'] == '' ||
-    params['courseId'] == null ||
-    params['content'] == '') {
+  if (params.value.noticeId == '' ||
+    params.value.courseId == '' ||
+    params.value.content == null ||
+    params.value.publishTime == ''||
+    params.value.noticeTitle == '') {
     ElMessage({
       message: '表单未填写完整！',
       type: 'warning',
@@ -207,7 +214,7 @@ const onSubmit = () => {
   console.log("要发出去的数据：", params)
   console.log(JSON.stringify(params));
 
-  addAnnouncement(params)
+  addAnnouncement(params.value)
     .then((res: any) => {
       console.log(res)
       ElMessage({

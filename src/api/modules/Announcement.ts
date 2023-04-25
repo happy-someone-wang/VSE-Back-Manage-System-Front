@@ -12,7 +12,7 @@ export const getAnnouncementsByCourseId = (params : object) => {
 };
 
 //新增/修改公告
-export const addAnnouncement = (params : Announcement.SingleAnnouncement) => {
+export const addAnnouncement = (params: object | undefined) => {
 	return http.post<Announcement.SingleAnnouncement>(PORT1 + `/coursenoticeadd`, params, { headers: { noLoading: true } });
 };
 

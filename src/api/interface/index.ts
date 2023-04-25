@@ -138,9 +138,9 @@ export namespace CourseManagement{
 //公告模块
 export namespace Announcement{
 	export interface SingleAnnouncement{
-		courseId:number,
+		courseId:number | string,
 		noticeTitle: string,
-		noticeId: number,
+		noticeId: number  | string,
 		publishTime:string,
 		content:string
 	}
