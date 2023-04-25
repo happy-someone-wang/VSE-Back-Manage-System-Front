@@ -163,7 +163,7 @@ const showList = ref<CourseManagement.CourseInfo[]>([])
 const addCourseForm = ref({ courseName: '', semester: '春季', year: 2023, teacherId: 2001001, studentList: [] })
 // 用于导入的学生列表
 // const studentList: object[] = []
-const studentList = ref<CourseManagement.ImportedStudent>([])
+const studentList = ref<CourseManagement.ImportedStudent[]>([])
 const addStudentForm = ref<CourseManagement.ImportedStudent>({
   学校: '',
   学号: '',
