@@ -46,7 +46,7 @@
         <div id="editor-container">
           <Editor v-model="addNoticeForm.content" />
         </div> -->
-        <el-input v-model="addNoticeForm.content" />
+        <el-input type="textarea" v-model="addNoticeForm.content" :rows="10" />
       </el-form-item>
     </el-form>
     <el-button type="primary" @click="onSubmit">确认</el-button>
@@ -74,7 +74,7 @@
         <div id="editor-container">
           <Editor v-model="addNoticeForm.content" />
         </div> -->
-        <el-input v-model="addNoticeForm.content" />
+        <el-input type="textarea" v-model="addNoticeForm.content" :rows="10" />
       </el-form-item>
     </el-form>
     <el-button type="primary" @click="onSubmit">确认</el-button>
@@ -89,7 +89,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import type { UploadInstance } from 'element-plus'
 import { Announcement } from '@/api/interface'
 import { getAnnouncementsByCourseId, addAnnouncement, deleteAnnouncementsById } from "@/api/modules/Announcement"
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElForm, ElFormItem} from 'element-plus'
 import Editor from '@wangeditor/editor'
 
 const courseId = 42041301
@@ -139,10 +139,14 @@ const clickAddNotice = () => {
 //点击修改课程按钮
 const clickeditNotice = (row: {
   noticeId: number; courseId: number
-  noticeTitle: string; publishTime: Date; content: string
+  title: string; time: Date; content: string
 }) => {
   dialogModifyVisible.value = true
-  addNoticeForm.value = row
+  addNoticeForm.value.noticeId = row.noticeId
+  addNoticeForm.value.courseId = courseId
+  addNoticeForm.value.content = row.content
+  addNoticeForm.value.noticeTitle = row.title
+  addNoticeForm.value.publishTime = row.time
 }
 //点击删除课程按钮
 const clickdeleteNotice = (param: number) => {
@@ -189,7 +193,7 @@ const deleteNotice = () => {
 //确认提交新增
 const onSubmit = () => {
 
-  let params= ref<Announcement.SingleAnnouncement>({
+  let params = ref<Announcement.SingleAnnouncement>({
     // courseId: 0,
     courseId: (addNoticeForm.value.courseId).toString(),
     noticeId: (0).toString(),
@@ -202,7 +206,7 @@ const onSubmit = () => {
   if (params.value.noticeId == '' ||
     params.value.courseId == '' ||
     params.value.content == null ||
-    params.value.publishTime == ''||
+    params.value.publishTime == '' ||
     params.value.noticeTitle == '') {
     ElMessage({
       message: '表单未填写完整！',
