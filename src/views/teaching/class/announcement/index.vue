@@ -91,8 +91,11 @@ import { Announcement } from '@/api/interface'
 import { getAnnouncementsByCourseId, addAnnouncement, deleteAnnouncementsById } from "@/api/modules/Announcement"
 import { ElMessage, ElForm, ElFormItem} from 'element-plus'
 import Editor from '@wangeditor/editor'
+import { useRouter } from 'vue-router'
 
-const courseId = 42041301
+const router = useRouter();
+const routerName = router.currentRoute.value.name!.valueOf();
+const courseId = (routerName as string)!.split('-')[0]
 const deleteNoticeId = ref(0)
 const dialogTableVisible = ref(false)
 const dialogDeleteVisible = ref(false)

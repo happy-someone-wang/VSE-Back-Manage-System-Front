@@ -52,8 +52,11 @@
 import { ref, onMounted } from 'vue'
 import { CourseManagement } from '@/api/interface'
 import { getstudentsByCourseId, addStudent, getFreeStudent, deleteStudent } from "@/api/modules/student"
+import { useRouter } from 'vue-router';
 
-const courseId = ref({ courseId: "42041301" })
+const router = useRouter();
+const routerName = router.currentRoute.value.name!.valueOf();
+const courseId = ref({ courseId: (routerName as string)!.split('-')[0] })
 const dialogAddStudentVisible = ref(false)
 // 用于导入的学生列表
 // const studentList: object[] = []
